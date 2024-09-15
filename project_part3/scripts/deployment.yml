@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventory_management-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inventory_management
+  template:
+    metadata:
+      labels:
+        app: inventory_management
+    spec:
+      containers:
+      - name: inventory_management-container
+        image: chandrakanth00/inventory_management:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: DATABASE_URL
+          value: "postgresql://db_722week7_user:RFKT5BMc0kcVtIXYEzf3t8I30k1JTJDV@dpg-crj81c3v2p9s738rlho0-a.oregon-postgres.render.com/db_722week7"
+        - name: APP_ENV
+          value: "production"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: inventory_management-service
+spec:
+  type: NodePort
+  selector:
+    app: inventory_management
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+      nodePort: 30001

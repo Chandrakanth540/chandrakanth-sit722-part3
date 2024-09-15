@@ -1,0 +1,28 @@
+version: '3'
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: db_722week7
+      POSTGRES_USER: db_722week7_user
+      POSTGRES_PASSWORD: RFKT5BMc0kcVtIXYEzf3t8I30k1JTJDV
+    ports:
+      - "5432:5432"
+
+  book_catalog:
+    build: ./book_catalog
+    environment:
+      DATABASE_URL: postgresql://db_722week7_user:RFKT5BMc0kcVtIXYEzf3t8I30k1JTJDV@dpg-crj81c3v2p9s738rlho0-a.oregon-postgres.render.com/db_722week7
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  inventory_management:
+    build: ./inventory_management
+    environment:
+      DATABASE_URL: postgresql://db_722week7_user:RFKT5BMc0kcVtIXYEzf3t8I30k1JTJDV@dpg-crj81c3v2p9s738rlho0-a.oregon-postgres.render.com/db_722week7
+    ports:
+      - "8001:8000"
+    depends_on:
+      - db
